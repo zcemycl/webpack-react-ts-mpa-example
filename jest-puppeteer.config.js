@@ -3,7 +3,8 @@ const ci = Boolean(process.env.CI || false);
 const baseOptions = {
     server: {
         command: 'npm run start',
-        port: 3000
+        port: 3000,
+        launchTimeout: 50000 
     }
 }
 
