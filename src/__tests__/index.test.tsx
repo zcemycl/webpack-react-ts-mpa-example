@@ -15,7 +15,7 @@ if (!ci) {
         '--disable-gpu']
 }
 
-const itif = ( condition ) => condition?it:it.skip
+const itif = ( condition: boolean ) => condition?it:it.skip
 
 describe('e2e with jest-puppeteer', () => {
     let browser: puppeteer.Browser;
