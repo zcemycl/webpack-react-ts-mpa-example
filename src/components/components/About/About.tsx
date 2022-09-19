@@ -5,7 +5,6 @@ const About: FC = () => {
     return (
         <>
             <h4>This is the About Page...</h4>
-            <p>Just for testing...</p>
         </>
     )
 }
