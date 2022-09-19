@@ -6,48 +6,48 @@ on:
       - main
 
 jobs:
-  # ci:
-  #   runs-on: ubuntu-latest
-  #   container: lironavon/docker-puppeteer-container:14.16.0
-  #   env:
-  #     CI: true
-  #   steps: 
-  #     # add git to the container and set it up with the token
-  #     - name: setup git in container
-  #       uses: actions/checkout@v2
-  #       with:
-  #         token: ${{ secrets.GITHUB_TOKEN }}
+  ci:
+    runs-on: ubuntu-latest
+    container: lironavon/docker-puppeteer-container:14.16.0
+    env:
+      CI: true
+    steps: 
+      # add git to the container and set it up with the token
+      - name: setup git in container
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-  #     # cache the dependencies from any node_modules directory
-  #     - name: cache dependencies
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: '**/node_modules'
-  #         key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      # cache the dependencies from any node_modules directory
+      - name: cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
           
-  #     # install the dependencies
-  #     - name: install dependencies
-  #       run: |
-  #         npm install -f
-  #         cd ./node_modules/puppeteer
-  #         npm run install
-  #         cd ../..
-  #         npm i puppeteer --save
+      # install the dependencies
+      - name: install dependencies
+        run: |
+          npm install -f
+          cd ./node_modules/puppeteer
+          npm run install
+          cd ../..
+          npm i puppeteer --save
 
-  #     - name: build
-  #       run: |
-  #         npm run build
+      - name: build
+        run: |
+          npm run build
 
-  #     # run the tests
-  #     - name: test
-  #       run: npm run test
+      # run the tests
+      - name: test
+        run: npm run test
 
-  #     # Coveralls
-  #     - name: Coveralls
-  #       uses: coverallsapp/github-action@master
-  #       with:
-  #         github-token: ${{ secrets.GITHUB_TOKEN }}
-  #         path-to-lcov: coverage/lcov.info
+      # Coveralls
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage/lcov.info
 
   build:
     runs-on: ubuntu-latest
