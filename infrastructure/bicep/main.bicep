@@ -17,17 +17,17 @@ param acrSku string = 'Basic'
 
 @description('Whether new or existing container registry')
 @allowed(['new', 'existing'])
-param acrNewOrExisiting string = 'new'
+param acrNewOrExisting string = 'existing'
 
 @description('Whether new or existing app service')
 @allowed(['new', 'existing'])
-param apsNewOrExisiting string = 'new'
+param apsNewOrExisting string = 'existing'
 
 param createdBy string = 'Leo Leung'
 param projectName string = 'Learn Azure'
 param dateTime string = utcNow()
 
-module acrModule './modules/acr.bicep' = if (acrNewOrExisiting == 'new') {
+module acrModule './modules/acr.bicep' = if (acrNewOrExisting == 'new') {
   name: 'acrDeploy'
   params: {
     acrName: acrName
@@ -39,7 +39,7 @@ module acrModule './modules/acr.bicep' = if (acrNewOrExisiting == 'new') {
   }
 }
 
-module appserviceModule './modules/app_service.bicep' = if (apsNewOrExisiting == 'new') {
+module appserviceModule './modules/app_service.bicep' = if (apsNewOrExisting == 'new') {
   name: 'apsDeploy'
   params: {
     webAppName: webAppName
