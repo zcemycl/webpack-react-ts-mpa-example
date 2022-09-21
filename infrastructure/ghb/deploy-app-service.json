@@ -3,10 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "webAppName": {
-            "value": "acrleoapp97"
-        },
-        "acrNewOrExisting": {
-            "value": "existing"
+            "value": "acrleoapp977"
         },
         "apsNewOrExisting": {
             "value": "new"

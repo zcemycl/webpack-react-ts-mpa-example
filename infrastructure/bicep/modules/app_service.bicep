@@ -35,8 +35,7 @@ resource Microsoft_Web_sites_webAppName 'Microsoft.Authorization/roleAssignments
   name: guid('Microsoft.Web/sites/${webAppName}')
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
-    // roleDefinitionId: '/subscriptions/${reference(webAppName_resource.id, '2022-06-15', 'full').subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d'
-    principalId: reference(webAppName_resource.id, '2022-06-15', 'full').identity.principalId
+    principalId: reference(webAppName_resource.id, '2022-03-01', 'full').identity.principalId
     principalType: 'ServicePrincipal'
   }
 }

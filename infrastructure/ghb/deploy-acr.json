@@ -3,13 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "acrName": {
-            "value": "acrleotest97"
+            "value": "acrleotest977"
         },
         "acrNewOrExisting": {
-            "value": "existing"
-        },
-        "apsNewOrExisting": {
-            "value": "existing"
+            "value": "new"
         }
     }
 }
