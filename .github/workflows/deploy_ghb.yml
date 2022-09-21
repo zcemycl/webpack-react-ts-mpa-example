@@ -6,7 +6,7 @@ on:
       - 'main'
 
 jobs:
-  container-registry:
+  acr-app-service:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
@@ -15,17 +15,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: deploy
+      - name: deploy acr
         id: deploy-acr
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./infrastructure/bicep/main.bicep
-          parameters: 'acrName=acrleotest97 acrNewOrExisiting=existing'
+          parameters: ./infrastructure/ghb/deploy-acr.json
           failOnStdErr: false
 
-      - name: login
+      - name: login acr
         id: acr-login
         uses: azure/CLI@v1
         with: 
@@ -54,3 +54,13 @@ jobs:
         with:
           push: true
           tags: ${{ steps.acr-login.outputs.ACR_LOGIN_SERVER }}/bicep-app-service-container:latest
+
+      - name: deploy app service
+        id: deploy-app-service
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./infrastructure/bicep/main.bicep
+          parameters: ./infrastructure/ghb/deploy-app-service.json dockerRegistryHost=${{ steps.acr-login.outputs.ACR_LOGIN_SERVER }} dockerImage=bicep-app-service-container:latest
+          failOnStdErr: false
