@@ -27,11 +27,11 @@ resource webAppName_resource 'Microsoft.Web/sites@2022-03-01' = {
       linuxFxVersion: 'DOCKER|${dockerRegistryHost}/${dockerImage}' 
       acrUseManagedIdentityCreds: true
     }
-    serverFarmId: '/subscriptions/${subscription().subscriptionId}/resourcegroups/${resourceGroup().id}/providers/Microsoft.Web/serverfarms/${hostingPlanName}'
+    serverFarmId: hostingPlanName_resource.id
   }
-  dependsOn: [
-    hostingPlanName_resource
-  ]
+  // dependsOn: [
+  //   hostingPlanName_resource
+  // ]
 }
 
 resource Microsoft_Web_sites_webAppName 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
