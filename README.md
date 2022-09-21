@@ -11,6 +11,7 @@
 4. Puppeteer docker
 5. Github actions
 6. Typescript
+7. Docker Multistages deployment
 
 #### References
 1. [React with TypeScript: Best Practices](https://www.sitepoint.com/react-with-typescript-best-practices/)
