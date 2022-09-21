@@ -22,7 +22,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./infrastructure/bicep/main.bicep
-          parameters: ./infrastructure/ghb/deploy-acr.json
+          parameters: 'acrName=acrleotest97 acrNewOrExisiting=existing apsNewOrExisiting=existing'
           failOnStdErr: false
 
       - name: login acr
@@ -62,5 +62,5 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./infrastructure/bicep/main.bicep
-          parameters: ./infrastructure/ghb/deploy-app-service.json dockerRegistryHost=${{ steps.acr-login.outputs.ACR_LOGIN_SERVER }} dockerImage=bicep-app-service-container:latest
+          parameters: webAppName=acrleoapp97 acrNewOrExisiting=existing apsNewOrExisiting=new dockerRegistryHost=${{ steps.acr-login.outputs.ACR_LOGIN_SERVER }} dockerImage=bicep-app-service-container:latest
           failOnStdErr: false
