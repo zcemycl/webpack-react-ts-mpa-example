@@ -1,5 +1,5 @@
 param webAppName string
-param hostingPlanName string = 'asp-${webAppName}'
+var hostingPlanName = 'asp-${webAppName}'
 param dockerRegistryHost string = 'acrleotest97.azurecr.io'
 param dockerImage string = 'bicep-app-service-container:latest'
 
