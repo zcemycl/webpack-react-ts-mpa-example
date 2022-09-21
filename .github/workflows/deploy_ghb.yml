@@ -31,7 +31,7 @@ jobs:
         with: 
           azcliversion: 2.39.0
           inlineScript: |
-            ACR_NAME=$(a=$(az acr list --query '[0].name' -o tsv))
+            ACR_NAME=$(az acr list --query '[0].name' -o tsv)
             LOGIN=$(az acr login --name $ACR_NAME --expose-token)
             ACR_ACCESS_TOKEN=$(echo $LOGIN | jq -r '.accessToken')
             ACR_LOGIN_SERVER=$(echo $LOGIN | jq -r '.loginServer')
