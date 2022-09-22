@@ -1,0 +1,39 @@
+{
+    "administratorsGroup": null,
+    "authorization": {
+      "parameters": {
+        "loginServer": "",
+        "role": "8311e382-0749-4cb8-b61a-304f252e45ec",
+        "scope": "",
+        "tenantId": ""
+      },
+      "scheme": "ServicePrincipal"
+    },
+    "createdBy": {
+      "displayName": "",
+      "inactive": null,
+      "isAadIdentity": null,
+      "isContainer": null,
+      "isDeletedInOrigin": null,
+      "profileUrl": null
+    },
+    "data": {
+      "registryId": "",
+      "registrytype": "ACR",
+      "subscriptionId": "",
+      "subscriptionName": ""
+    },
+    "description": "",
+    "groupScopeId": null,
+    "isReady": true,
+    "isShared": false,
+    "name": "",
+    "operationStatus": {
+      "state": "Ready",
+      "statusMessage": ""
+    },
+    "owner": "Library",
+    "readersGroup": null,
+    "type": "dockerregistry",
+    "url": "https://hub.docker.com/"
+  }
