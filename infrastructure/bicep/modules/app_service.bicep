@@ -26,6 +26,12 @@ resource webAppName_resource 'Microsoft.Web/sites@2022-03-01' = {
     siteConfig: {
       linuxFxVersion: 'DOCKER|${dockerRegistryHost}/${dockerImage}' 
       acrUseManagedIdentityCreds: true
+      appSettings: [
+        {
+          name: 'DOCKER_ENABLE_CI'
+          value: 'true'
+        }
+      ]
     }
     serverFarmId: hostingPlanName_resource.id
   }
