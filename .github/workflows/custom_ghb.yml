@@ -57,7 +57,7 @@ on:
         options: ['new', 'existing']
         default: 'existing'
 
-name: ${{ github.event.inputs.workflowName }}
+name: Deploy Bicep Scripts Selectively
 
 jobs:
   build-and-deploy:
