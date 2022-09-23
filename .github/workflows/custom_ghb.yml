@@ -7,7 +7,7 @@ on:
         description: 'Created By: '
         required: true
         type: string
-        default: 'Leo Leung'
+        default: 'Leo-Leung'
       
       location:
         description: 'Location: '
@@ -19,7 +19,7 @@ on:
         description: 'Project Name: '
         required: true
         type: string
-        default: 'Learn Azure'
+        default: 'Learn-Azure'
 
       acrName:
         description: 'Azure Container Registry Name: '
