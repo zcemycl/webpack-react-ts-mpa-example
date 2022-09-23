@@ -28,6 +28,10 @@ resource webAppName_resource 'Microsoft.Web/sites@2022-03-01' = {
       acrUseManagedIdentityCreds: true
       appSettings: [
         {
+          name: 'DOCKER_REGISTRY_SERVER_URL'
+          value: 'https://${dockerRegistryHost}'
+        }
+        {
           name: 'DOCKER_ENABLE_CI'
           value: 'true'
         }
