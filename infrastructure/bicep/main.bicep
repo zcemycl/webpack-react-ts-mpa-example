@@ -6,6 +6,10 @@ param acrName string = ''
 @description('Provide a globally unique name of your Azure App Service')
 param webAppName string = ''
 
+@maxLength(50)
+@description('Provide a globally unique name of your Azure Webhook')
+param hookName string = ''
+
 param dockerRegistryHost string = 'acrleotest97.azurecr.io'
 param dockerImage string = 'bicep-app-service-container:latest'
 
@@ -22,6 +26,10 @@ param acrNewOrExisting string = 'existing'
 @description('Whether new or existing app service')
 @allowed(['new', 'existing'])
 param apsNewOrExisting string = 'existing'
+
+@description('Whether new or existing webhook')
+@allowed(['new', 'existing'])
+param webhookNewOrExisting string = 'existing'
 
 param createdBy string = 'Leo Leung'
 param projectName string = 'Learn Azure'
@@ -52,3 +60,13 @@ module appserviceModule './modules/app_service.bicep' = if (apsNewOrExisting == 
   }
 }
 
+module webhookModule './modules/acr_webhook.bicep' = if (webhookNewOrExisting == 'new') {
+  name: 'webhookDeploy'
+  params: {
+    webAppName: webAppName
+    acrName: acrName
+    location: location
+    dockerImage: dockerImage
+    hookName: hookName
+  }
+}
