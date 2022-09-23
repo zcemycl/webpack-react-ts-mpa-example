@@ -35,12 +35,25 @@
 3. In Project settings, permissions, endpoint creators, add your project to members. 
 4. Create docker endpoint, get id for your endpoint, and update it to enable all pipelines.
     ```
-    az devops service-endpoint create --service-endpoint-configuration ./infrastructure/adb/acr_service_conn.json --org https://dev.azure.com/leoleung0900/ -p leo-test-app
-    epId=`az devops service-endpoint list --org https://dev.azure.com/leoleung0900/ -p leo-test-app --query "[?name=='endpointname'].id" -o tsv` && echo $epId
-    az devops service-endpoint update --id $epId --enable-for-all true --org https://dev.azure.com/leoleung0900/ -p leo-test-app
+    az devops service-endpoint create --service-endpoint-configuration ./infrastructure/adb/acr_service_conn.json --org $org -p $project
+    epId=`az devops service-endpoint list --org $org -p $project --query "[?name=='endpointname'].id" -o tsv` && echo $epId
+    az devops service-endpoint update --id $epId --enable-for-all true --org $org -p $project
     ```
+
+### Problems
+1. The service connection is required before the run of the pipelines, even if you create it before docker build/push in previous step, it still complains. 
+2. Creating service connection for docker registry in the pipeline does not work, it only works in your local.
+
+### Current Solution
+Multiple Components of Infrastructure are deployed separately.
+1. Resource Manager Service Connection (once)
+2. Azure Container Registry (ACR) (once)
+3. Docker registry ACR Service Connection (once)
+4. Docker build/push (trigger by main)
+5. App Service (trigger by main)
 
 ### References 
 1. [Step by step: Manually Create an Azure DevOps Service Connection to Azure](https://4bes.nl/2019/07/11/step-by-step-manually-create-an-azure-devops-service-connection-to-azure/)
 2. [Please provide the JSON examples for --service-endpoint-configuration](https://github.com/Azure/azure-cli-extensions/issues/1495)
 3. [Create service endpoint connections to Docker registry & ACR](https://github.com/Azure/azure-devops-cli-extension/issues/706)
+4. [Azure Pipelines – Parameters + JSON File Substitution](https://codingwithtaz.blog/2020/09/13/azure-pipelines-parameters-and-file-substitution/)
