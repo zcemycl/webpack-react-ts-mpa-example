@@ -73,9 +73,9 @@ jobs:
           failOnStdErr: false
           parameters: acrNewOrExisting=${{ github.event.inputs.acrNewOrExisting }}
             acrName=${{ github.event.inputs.acrName }}
-            createdBy=${{ github.event.inputs.createdBy }}
+            createdBy="${{ github.event.inputs.createdBy }}"
             location=${{ github.event.inputs.location }}
-            projectName=${{ github.event.inputs.projectName }}
+            projectName="${{ github.event.inputs.projectName }}"
 
       - name: login acr
         id: acr-login
@@ -117,9 +117,9 @@ jobs:
           failOnStdErr: false
           parameters: apsNewOrExisting=${{ github.event.inputs.apsNewOrExisting }}
             webAppName=${{ github.event.inputs.webAppName }}
-            createdBy=${{ github.event.inputs.createdBy }}
+            createdBy="${{ github.event.inputs.createdBy }}"
             location=${{ github.event.inputs.location }}
-            projectName=${{ github.event.inputs.projectName }}
+            projectName="${{ github.event.inputs.projectName }}"
             dockerRegistryHost=${{ steps.acr-login.outputs.ACR_LOGIN_SERVER }} 
             dockerImage=${{ github.event.inputs.dockerImage }}
 
