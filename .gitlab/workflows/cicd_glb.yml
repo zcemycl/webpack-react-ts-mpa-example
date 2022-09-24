@@ -1,0 +1,84 @@
+image: ubuntu:latest
+
+variables:
+  SP_USERNAME: $SP_USERNAME
+  SP_PASSWORD: $SP_PASSWORD
+  SP_TENANT: $SP_TENANT
+  RG: leo-ml-test
+  NEW_ACR: new
+  NEW_APS: new
+  NEW_WEBHOOK: new
+  ACR_NAME: acrloetest122
+  WEBAPP_NAME: acrloeapp122
+  DOCKER_IMAGE: bicep-app-service-container:latest
+  HOOK_NAME: webhook1
+
+stages:  
+  - test
+  - build
+  - deploy
+
+test-job: 
+  stage: test
+  image: lironavon/docker-puppeteer-container:14.16.0
+  script:
+    - npm install -f
+    - cd ./node_modules/puppeteer
+    - npm run install
+    - cd ../..
+    - npm i puppeteer --save
+    - npm run test
+
+build-job: 
+  stage: build 
+  image: node:latest
+  script:
+    - npm install -f
+    - npm run build
+
+deploy-acr-job:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  script:
+    - az login --service-principal --tenant $SP_TENANT -u $SP_USERNAME -p $SP_PASSWORD
+    - az deployment group create --resource-group $RG 
+      --template-file ./infrastructure/bicep/main.bicep 
+      --parameters acrNewOrExisting=$NEW_ACR acrName=$ACR_NAME
+  
+build-push-image-job:
+  stage: deploy
+  image: docker:latest
+  services:
+    - name: docker:dind
+  before_script:
+    - docker info
+  needs: ['deploy-acr-job']
+  script:
+    - docker login $ACR_NAME.azurecr.io
+      --username $SP_USERNAME
+      --password $SP_PASSWORD
+    - docker build -t test .
+    - docker images
+    - docker tag test:latest $ACR_NAME.azurecr.io/$DOCKER_IMAGE
+    - docker push $ACR_NAME.azurecr.io/$DOCKER_IMAGE
+
+deploy-app-service-job:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  needs: ['build-push-image-job']
+  script:
+    - az login --service-principal --tenant $SP_TENANT -u $SP_USERNAME -p $SP_PASSWORD
+    - az deployment group create --resource-group $RG 
+      --template-file ./infrastructure/bicep/main.bicep 
+      --parameters apsNewOrExisting=$NEW_APS 
+      webAppName=$WEBAPP_NAME
+      dockerImage=$DOCKER_IMAGE
+      dockerRegistryHost=$ACR_NAME.azurecr.io
+    - az deployment group create --resource-group $RG 
+      --template-file ./infrastructure/bicep/main.bicep 
+      --parameters webhookNewOrExisting=$NEW_WEBHOOK
+      webAppName=$WEBAPP_NAME
+      acrName=$ACR_NAME
+      dockerImage=$DOCKER_IMAGE
+      hookName=$HOOK_NAME
+  
