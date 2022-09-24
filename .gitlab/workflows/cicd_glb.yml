@@ -14,12 +14,11 @@ variables:
   HOOK_NAME: webhook1
 
 stages:  
-  - test
-  - build
-  - deploy
+  - ci
+  - cd
 
 test-job: 
-  stage: test
+  stage: ci
   image: lironavon/docker-puppeteer-container:14.16.0
   script:
     - npm install -f
@@ -29,24 +28,45 @@ test-job:
     - npm i puppeteer --save
     - npm run test
 
+az-test-exist-job:
+  stage: ci
+  image: mcr.microsoft.com/azure-cli
+  script:
+    - az login --service-principal --tenant $SP_TENANT -u $SP_USERNAME -p $SP_PASSWORD
+    - findmatchacr=`az acr list --query "[?name=='$ACR_NAME'].name | length(@)"`
+    - if [ $findmatcher -eq 0 ]; then cond1=1; else cond1=0; fi
+    - findmatchaps=`az appservice plan list --query "[?name=='asp-$WEBAPP_NAME'].name | length(@)"`
+    - if [ $findmatchaps -eq 0 ]; then cond2=1; else cond2=0; fi
+    - echo "cond1=$cond1" >> test.env
+    - echo "cond2=$cond2" >> test.env
+  artifacts:
+    reports:
+      dotenv: test.env
+
 build-job: 
-  stage: build 
+  stage: ci
   image: node:latest
+  needs: ['test-job']
   script:
     - npm install -f
     - npm run build
 
 deploy-acr-job:
-  stage: deploy
+  stage: cd
   image: mcr.microsoft.com/azure-cli
+  needs: ['az-test-exist-job']
   script:
+    - echo "$cond1"
+    - if [ $cond1 -eq 0 ]; then exit 0; fi
     - az login --service-principal --tenant $SP_TENANT -u $SP_USERNAME -p $SP_PASSWORD
     - az deployment group create --resource-group $RG 
       --template-file ./infrastructure/bicep/main.bicep 
       --parameters acrNewOrExisting=$NEW_ACR acrName=$ACR_NAME
+  dependencies:
+    - az-test-exist-job
   
 build-push-image-job:
-  stage: deploy
+  stage: cd
   image: docker:latest
   services:
     - name: docker:dind
@@ -63,10 +83,12 @@ build-push-image-job:
     - docker push $ACR_NAME.azurecr.io/$DOCKER_IMAGE
 
 deploy-app-service-job:
-  stage: deploy
+  stage: cd
   image: mcr.microsoft.com/azure-cli
-  needs: ['build-push-image-job']
+  needs: ['az-test-exist-job', 'build-push-image-job']
   script:
+    - echo "$cond2"
+    - if [ $cond2 -eq 0 ]; then exit 0; fi
     - az login --service-principal --tenant $SP_TENANT -u $SP_USERNAME -p $SP_PASSWORD
     - az deployment group create --resource-group $RG 
       --template-file ./infrastructure/bicep/main.bicep 
@@ -81,4 +103,6 @@ deploy-app-service-job:
       acrName=$ACR_NAME
       dockerImage=$DOCKER_IMAGE
       hookName=$HOOK_NAME
+  dependencies:
+    - az-test-exist-job
   
