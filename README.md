@@ -12,7 +12,12 @@
 5. Github actions
 6. Typescript
 7. Docker Multistages deployment
-8. Azure App Service + Container Registry + Webhook
+8. Azure App Service
+9. Azure Devops
+10. Gitlab CI
+11. Azure Container Registry
+12. Azure Webhooks
+13. Azure Bicep
 
 #### References
 1. [React with TypeScript: Best Practices](https://www.sitepoint.com/react-with-typescript-best-practices/)
