@@ -2,6 +2,13 @@ resource "aws_ecr_repository" "this" {
     count = var.create?1:0
     name  = var.ecr_name
     force_delete = true
+    # provisioner "local-exec" {
+    #     command = <<-EOT
+    #         exec `echo ${aws_ecr_repository.this[0].arn} >> info.txt`
+    #         exec `echo ${aws_ecr_repository.this[0].registry_id} >> info.txt`
+    #         exec `echo ${aws_ecr_repository.this[0].repository_url} >> info.txt`
+    #     EOT
+    # }
 }
 
 # resource "null_resource" "push_docker_image" {
