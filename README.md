@@ -18,6 +18,9 @@
 11. Azure Container Registry
 12. Azure Webhooks
 13. Azure Bicep
+14. Terraform
+15. AWS Elastic Container Registry
 
 #### References
 1. [React with TypeScript: Best Practices](https://www.sitepoint.com/react-with-typescript-best-practices/)
+2. [Automate Terraform with GitHub Actions](https://learn.hashicorp.com/tutorials/terraform/github-actions)
