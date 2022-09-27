@@ -47,7 +47,7 @@ jobs:
 
       - name: Docker Login
         run: |
-          aws ecr get-login-password | docker login --username AWS --password-stdin ${{ steps.apply.outputs.ECR_REPO_URL }}
+          aws ecr get-login-password | docker login --username AWS --password-stdin ${{ steps.apply.outputs.ECR_ID }}.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
