@@ -28,22 +28,22 @@ jobs:
         working-directory: ./infrastructure/terraform
         run: terraform validate -no-color
         
-#       - name: Terraform Apply
-#         id: apply
-#         working-directory: ./infrastructure/terraform
-#         run: |
-#           terraform apply -auto-approve
-#           ECR_ID=$(terraform output --raw ecr_registry_id)
-#           # echo "::add-mask::$ECR_ID"
-#           echo "::set-output name=ECR_ID::$ECR_ID"
-#           ECR_REPO_URL=$(terraform output --raw ecr_repo_url)
-#           # echo "::add-mask::$ECR_REPO_URL"
-#           echo "::set-output name=ECR_REPO_URL::$ECR_REPO_URL"
+      - name: Terraform Apply
+        id: apply
+        working-directory: ./infrastructure/terraform
+        run: |
+          terraform apply -auto-approve
+          ECR_ID=$(terraform output ecr_registry_id)
+          # echo "::add-mask::$ECR_ID"
+          echo "::set-output name=ECR_ID::$ECR_ID"
+          ECR_REPO_URL=$(terraform output ecr_repo_url)
+          # echo "::add-mask::$ECR_REPO_URL"
+          echo "::set-output name=ECR_REPO_URL::$ECR_REPO_URL"
       
       - name: Terraform Info
         working-directory: ./infrastructure/terraform
         run: |
-          terraform output --raw ecr_repo_url
+          terraform output ecr_repo_url
       
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -58,7 +58,7 @@ jobs:
 
       - name: Build, tag, and push image to Amazon ECR
         env:
-          ECR_REGISTRY: 641843414118.dkr.ecr.eu-west-2.amazonaws.com/leoacrghtf
+          ECR_REGISTRY: ${{ steps.apply.outputs.ECR_REPO_URL }}
           # ECR_REPOSITORY: docker_nodejs_demo
           # IMAGE_TAG: nodejs_demo_image
         run: |
