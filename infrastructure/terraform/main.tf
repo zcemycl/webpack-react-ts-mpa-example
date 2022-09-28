@@ -30,3 +30,13 @@ module "container_registry" {
     create = true
     ecr_name = var.ecr_name
 }
+
+module "iam_ecs" {
+    source = "./modules/aws/iam"
+}
+
+module "vpc" {
+    source = "./modules/aws/vpc"
+    public_subnets = var.public_subnets
+    availability_zones = var.availability_zones
+}
