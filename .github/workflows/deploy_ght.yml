@@ -23,10 +23,10 @@ jobs:
         working-directory: ./infrastructure/terraform
         run: terraform init
         
-#       - name: Terraform Validate
-#         id: validate
-#         working-directory: ./infrastructure/terraform
-#         run: terraform validate -no-color
+      - name: Terraform Validate
+        id: validate
+        working-directory: ./infrastructure/terraform
+        run: terraform validate -no-color
         
 #       - name: Terraform Apply
 #         id: apply
@@ -39,7 +39,12 @@ jobs:
 #           ECR_REPO_URL=$(terraform output --raw ecr_repo_url)
 #           # echo "::add-mask::$ECR_REPO_URL"
 #           echo "::set-output name=ECR_REPO_URL::$ECR_REPO_URL"
-        
+      
+      - name: Terraform Info
+        working-directory: ./infrastructure/terraform
+        run: |
+          terraform output --raw ecr_repo_url
+      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
