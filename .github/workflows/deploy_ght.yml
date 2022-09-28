@@ -34,10 +34,10 @@ jobs:
         working-directory: ./infrastructure/terraform
         run: |
           terraform apply -auto-approve
-          ECR_ID=$(terraform output ecr_registry_id)
+          ECR_ID=$(terraform output --raw ecr_registry_id)
           # echo "::add-mask::$ECR_ID"
           echo "::set-output name=ECR_ID::$ECR_ID"
-          ECR_REPO_URL=$(terraform output ecr_repo_url)
+          ECR_REPO_URL=$(terraform output --raw ecr_repo_url)
           # echo "::add-mask::$ECR_REPO_URL"
           echo "::set-output name=ECR_REPO_URL::$ECR_REPO_URL"
       
