@@ -40,3 +40,15 @@ module "vpc" {
     public_subnets = var.public_subnets
     availability_zones = var.availability_zones
 }
+
+module "sg" {
+    source = "./modules/aws/sg"
+    vpc_id = module.vpc.vpc_id
+}
+
+module "lb" {
+    source = "./modules/aws/lb"
+    subnets = module.vpc.public_subnet_ids
+    vpc_id = module.vpc.vpc_id
+    sg_id = module.sg.sg_id
+}
