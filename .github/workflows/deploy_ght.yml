@@ -21,17 +21,17 @@ jobs:
     
       - name: Terraform Init
         id: init
-        working-directory: ./infrastructure/terraform
+        working-directory: ./infrastructure/terraform/aws
         run: terraform init
         
       - name: Terraform Validate
         id: validate
-        working-directory: ./infrastructure/terraform
+        working-directory: ./infrastructure/terraform/aws
         run: terraform validate -no-color
         
       - name: Terraform Apply
         id: apply
-        working-directory: ./infrastructure/terraform
+        working-directory: ./infrastructure/terraform/aws
         run: |
           terraform apply -auto-approve
           ECR_ID=$(terraform output --raw ecr_registry_id)
@@ -42,7 +42,7 @@ jobs:
           echo "::set-output name=ECR_REPO_URL::$ECR_REPO_URL"
       
       - name: Terraform Info
-        working-directory: ./infrastructure/terraform
+        working-directory: ./infrastructure/terraform/aws
         run: |
           terraform output ecr_repo_url
       
