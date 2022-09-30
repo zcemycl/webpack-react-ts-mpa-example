@@ -37,6 +37,7 @@ plan:
 apply:
     stage: apply
     script:
+        - ls
         - terraform apply -auto-approve
         - terraform output --raw ecr_repo_url
         - terraform output --raw ecr_registry_id
@@ -50,7 +51,7 @@ apply:
         - plan
     artifacts:
         reports:
-            dotenv: test.env
+            dotenv: infrastructure/terraform/aws/test.env
 
 docker:
     stage: docker
@@ -73,9 +74,9 @@ docker:
         - echo $REGISTRY_ID.dkr.ecr.eu-west-2.amazonaws.com
         - DOCKER_REGISTRY=$REGISTRY_ID.dkr.ecr.eu-west-2.amazonaws.com
         - cd ../../..
-        - docker build -t $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID . 
         - aws ecr get-login-password | docker login --username AWS --password-stdin $DOCKER_REGISTRY
-        - docker push $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID
+        - docker build -t $REPO_URL:latest . 
+        - docker push $REPO_URL:latest
 
     dependencies:
         - apply
