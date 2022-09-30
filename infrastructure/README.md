@@ -12,5 +12,6 @@
 5. Gitlab CI + Bicep + Azure (glb)
     - `cicd_glb.yml`
 6. Gitlab CI + Terraform + AWS (glt)
+    - `cicd_glt.yml`
 7. Github actions + Terraform + GCP (ghtg)
 8. Gitlab CI + Terraform + GCP (gltg)

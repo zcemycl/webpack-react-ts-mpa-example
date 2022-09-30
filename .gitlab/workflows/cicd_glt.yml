@@ -1,0 +1,81 @@
+stages:
+    - validate
+    - plan
+    - apply
+    - docker
+
+image:
+    name: hashicorp/terraform
+    entrypoint:
+        - '/usr/bin/env'
+        - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+    
+before_script:
+    - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+    - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - mkdir ~/.terraform.d
+    - sed -i "s/_TERRAFORM_TOKEN_/$TF_TOKEN/g" credentials.tfrc.json 
+    - cat credentials.tfrc.json 
+    - cp credentials.tfrc.json ~/.terraform.d
+    - cd infrastructure/terraform/aws
+    - terraform --version
+    - terraform init
+
+validate:
+    stage: validate
+    script:
+        - terraform validate
+
+plan:
+    stage: plan
+    script:
+        - terraform plan 
+    dependencies:
+        - validate
+
+apply:
+    stage: apply
+    script:
+        - terraform apply -auto-approve
+        - terraform output --raw ecr_repo_url
+        - terraform output --raw ecr_registry_id
+        - touch test.env
+        - REPO_URL=`terraform output --raw ecr_repo_url`
+        - echo "REPO_URL=$REPO_URL" >> test.env
+        - REGISTRY_ID=`terraform output --raw ecr_registry_id`
+        - echo "REGISTRY_ID=$REGISTRY_ID" >> test.env
+        - cat test.env
+    dependencies:
+        - plan
+    artifacts:
+        reports:
+            dotenv: test.env
+
+docker:
+    stage: docker
+    image: 
+        name: amazon/aws-cli
+        entrypoint: [""]
+    services:
+        - docker:dind
+    before_script:
+        - amazon-linux-extras install docker
+        - aws --version
+        - docker --version
+    needs: ['apply']
+    script: 
+        - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+        - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+        - export AWS_DEFAULT_REGION=eu-west-2
+        - ls
+        - echo "$REPO_URL"
+        - echo $REGISTRY_ID.dkr.ecr.eu-west-2.amazonaws.com
+        - DOCKER_REGISTRY=$REGISTRY_ID.dkr.ecr.eu-west-2.amazonaws.com
+        - cd ../../..
+        - docker build -t $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID . 
+        - aws ecr get-login-password | docker login --username AWS --password-stdin $DOCKER_REGISTRY
+        - docker push $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID
+
+    dependencies:
+        - apply
