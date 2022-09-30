@@ -30,6 +30,11 @@
 #### AWS
 1. AWS Elastic Container Registry
 2. AWS Virtual Private Cloud
+3. AWS Elastic Container Services
+4. AWS Autoscaling Group
+
+#### GCP
+
 
 #### References
 1. [React with TypeScript: Best Practices](https://www.sitepoint.com/react-with-typescript-best-practices/)
