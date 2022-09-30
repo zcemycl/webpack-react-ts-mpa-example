@@ -37,7 +37,6 @@ plan:
 apply:
     stage: apply
     script:
-        - ls
         - terraform apply -auto-approve
         - terraform output --raw ecr_repo_url
         - terraform output --raw ecr_registry_id
@@ -46,7 +45,6 @@ apply:
         - echo "REPO_URL=$REPO_URL" >> test.env
         - REGISTRY_ID=`terraform output --raw ecr_registry_id`
         - echo "REGISTRY_ID=$REGISTRY_ID" >> test.env
-        - cat test.env
     dependencies:
         - plan
     artifacts:
@@ -55,13 +53,12 @@ apply:
 
 docker:
     stage: docker
-    image: 
-        name: amazon/aws-cli
-        entrypoint: [""]
+    image: docker:latest
     services:
         - docker:dind
     before_script:
-        - amazon-linux-extras install docker
+        - apk add --no-cache python3 py3-pip
+        - pip3 install --no-cache-dir awscli
         - aws --version
         - docker --version
     needs: ['apply']
@@ -69,11 +66,9 @@ docker:
         - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
         - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
         - export AWS_DEFAULT_REGION=eu-west-2
-        - ls
         - echo "$REPO_URL"
         - echo $REGISTRY_ID.dkr.ecr.eu-west-2.amazonaws.com
         - DOCKER_REGISTRY=$REGISTRY_ID.dkr.ecr.eu-west-2.amazonaws.com
-        - cd ../../..
         - aws ecr get-login-password | docker login --username AWS --password-stdin $DOCKER_REGISTRY
         - docker build -t $REPO_URL:latest . 
         - docker push $REPO_URL:latest
