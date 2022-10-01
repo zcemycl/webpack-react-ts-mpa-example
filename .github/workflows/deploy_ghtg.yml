@@ -68,8 +68,7 @@ jobs:
 
       - name: Build, tag, and push image to GCP AR
         env: 
-          AR_REPO: europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/$ar_name/$image_name
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: |
-          docker build -t $AR_REPO:latest .
-          docker push $AR_REPO:latest
+          docker build -t europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.ar_name }}/${{ env.image_name }}:latest .
+          docker push europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.ar_name }}/${{ env.image_name }}:latest
