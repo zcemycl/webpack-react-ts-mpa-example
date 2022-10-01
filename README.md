@@ -34,6 +34,7 @@
 4. AWS Autoscaling Group
 
 #### GCP
+1. GCP Artifact Registry
 
 
 #### References
