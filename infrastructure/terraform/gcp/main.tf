@@ -6,9 +6,12 @@ terraform {
         }
     }
 
-    backend "gcs" {
-        bucket = "webpack-tf-state-dev"
-        prefix = "terraform/state"
+    cloud {
+        organization = "limilim"
+
+        workspaces {
+            name = "gh-actions-demo"
+        }
     }
 }
 
