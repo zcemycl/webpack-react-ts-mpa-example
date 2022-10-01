@@ -25,4 +25,5 @@ module "artifact_registry" {
     source = "./modules/ar"
     gcp_region = var.gcp_region
     gcp_project = var.gcp_project
+    ar_repo_id = var.ar_repo_id
 }
