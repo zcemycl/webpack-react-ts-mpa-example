@@ -18,7 +18,7 @@ terraform {
 provider "google" {
     region = var.gcp_region
     project = var.gcp_project
-    credentials = var.gcp_credentials
+    # credentials = var.gcp_credentials
 }
 
 module "artifact_registry" {
