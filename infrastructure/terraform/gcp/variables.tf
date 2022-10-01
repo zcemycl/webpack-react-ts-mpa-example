@@ -11,7 +11,7 @@ variable "gcp_project" {
 
 variable "ar_repo_id" {
     type = string 
-    default = "leotestgcr2"
+    default = "leotestgcr2126"
 }
 
 variable "gcp_credentials" {
