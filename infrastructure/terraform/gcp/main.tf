@@ -5,6 +5,11 @@ terraform {
             version = "~>4.0"
         }
     }
+
+    backend "gcs" {
+        bucket = "webpack-tf-state-dev"
+        prefix = "terraform/state"
+    }
 }
 
 provider "google" {
