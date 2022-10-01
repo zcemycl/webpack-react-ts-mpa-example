@@ -26,15 +26,18 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Validate
         run: terraform validate
+        working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Plan
         run: terraform plan -var gcp_project=${{ secrets.GCP_PROJECT_ID }}
+        working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
