@@ -47,3 +47,11 @@ jobs:
         working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Build, tag, and push image to GCP AR
+        env: 
+          AR_REPO: europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/leotestgcr2/test
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: |
+          docker build -t $AR_REPO:latest .
+          docker push $AR_REPO:latest
