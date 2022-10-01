@@ -13,9 +13,3 @@ variable "ar_repo_id" {
     type = string 
     default = "leotestgcr2126"
 }
-
-# variable "gcp_credentials" {
-#     type = string
-#     sensitive = true
-#     description = "Google Cloud service account credentials"
-# }

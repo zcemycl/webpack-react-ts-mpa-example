@@ -64,3 +64,4 @@ terraform.rc
 info.txt
 gcp-credential.json
 *.swp
+credentials.json
