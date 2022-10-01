@@ -13,11 +13,18 @@ jobs:
       - name: Checkout 
         uses: actions/checkout@v3 
 
-      - name: 'Authenticate to Google Cloud'
+      - name: Authenticate to Google Cloud
         id: auth
         uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: 'Storing SA Key to json file'
+        id: sa-config
+        run: |
+          echo ${{ secrets.GOOGLE_CREDENTIALS }} | base64 -d > credentials.json
+          mv credentials.json ./infrastructure/terraform/gcp
+        shell: bash
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -38,13 +45,13 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Plan
-        run: terraform plan -var gcp_project=${{ secrets.GCP_PROJECT_ID }} -var gcp_credentials=$GOOGLE_CREDENTIALS
+        run: terraform plan -var gcp_project=${{ secrets.GCP_PROJECT_ID }}
         working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var gcp_project=${{ secrets.GCP_PROJECT_ID }} -var gcp_credentials=$GOOGLE_CREDENTIALS
+        run: terraform apply -auto-approve -var gcp_project=${{ secrets.GCP_PROJECT_ID }}
         working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
