@@ -62,3 +62,5 @@ terraform.rc
 .terraform.lock.hcl
 
 info.txt
+gcp-credential.json
+*.swp
