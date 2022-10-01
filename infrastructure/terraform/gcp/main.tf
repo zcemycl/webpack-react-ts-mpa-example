@@ -13,7 +13,7 @@ provider "google" {
 }
 
 module "artifact_registry" {
-    source = "./module/ar"
+    source = "./modules/ar"
     gcp_region = var.gcp_region
     gcp_project = var.gcp_project
 }
