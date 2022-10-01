@@ -38,7 +38,7 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Plan
-        run: terraform plan -var gcp_project=${{ secrets.GCP_PROJECT_ID }}
+        run: terraform plan -var gcp_project=${{ secrets.GCP_PROJECT_ID }} -var gcp_credentials=$GOOGLE_CREDENTIALS
         working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
