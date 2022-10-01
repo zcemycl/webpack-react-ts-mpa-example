@@ -24,47 +24,47 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-#       - name: Setup Terraform
-#         uses: hashicorp/setup-terraform@v1
-#         with:
-#           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-#           terraform_wrapper: false
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
 
-#       - name: Terraform Init
-#         run: terraform init
-#         working-directory: ./infrastructure/terraform/gcp
-#         env:
-#           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./infrastructure/terraform/gcp
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-#       - name: create-json
-#         id: create-json
-#         uses: jsdaniell/create-json@1.1.2
-#         with:
-#           name: "credentials.json"
-#           json: ${{ secrets.GOOGLE_CREDENTIALS }}
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "credentials.json"
+          json: ${{ secrets.GOOGLE_CREDENTIALS }}
           
-#       - name: move-json
-#         run: mv credentials.json ./infrastructure/terraform/gcp
+      - name: move-json
+        run: mv credentials.json ./infrastructure/terraform/gcp
 
-#       - name: Terraform Validate
-#         run: |
-#           terraform validate
-#         working-directory: ./infrastructure/terraform/gcp
-#         env:
-#           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      - name: Terraform Validate
+        run: |
+          terraform validate
+        working-directory: ./infrastructure/terraform/gcp
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-#       - name: Terraform Plan
-#         run: |
-#           terraform plan -var gcp_project=${{ secrets.GCP_PROJECT_ID }} -var ar_repo_id=$ar_name
-#         working-directory: ./infrastructure/terraform/gcp
-#         env:
-#           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      - name: Terraform Plan
+        run: |
+          terraform plan -var gcp_project=${{ secrets.GCP_PROJECT_ID }} -var ar_repo_id=$ar_name
+        working-directory: ./infrastructure/terraform/gcp
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-#       - name: Terraform Apply
-#         run: terraform apply -auto-approve -var gcp_project=${{ secrets.GCP_PROJECT_ID }} -var ar_repo_id=$ar_name
-#         working-directory: ./infrastructure/terraform/gcp
-#         env:
-#           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var gcp_project=${{ secrets.GCP_PROJECT_ID }} -var ar_repo_id=$ar_name
+        working-directory: ./infrastructure/terraform/gcp
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Build, tag, and push image to GCP AR
         env: 
