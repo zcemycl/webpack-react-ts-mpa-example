@@ -41,3 +41,9 @@ jobs:
         working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var gcp_project=${{ secrets.GCP_PROJECT_ID }}
+        working-directory: ./infrastructure/terraform/gcp
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
