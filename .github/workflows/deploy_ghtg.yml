@@ -38,9 +38,18 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "credentials.json"
+          json: ${{ secrets.GOOGLE_CREDENTIALS }}
+          
+      - name: move-json
+        run: mv credentials.json ./infrastructure/terraform/gcp
+
       - name: Terraform Validate
         run: |
-          echo ${{ secrets.GOOGLE_CREDENTIALS }} > credentials.json
           terraform validate
         working-directory: ./infrastructure/terraform/gcp
         env:
