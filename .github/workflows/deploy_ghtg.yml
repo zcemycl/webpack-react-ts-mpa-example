@@ -19,12 +19,12 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: 'Storing SA Key to json file'
-        id: sa-config
-        run: |
-          echo ${{ secrets.GOOGLE_CREDENTIALS }} | base64 -d > credentials.json
-          mv credentials.json ./infrastructure/terraform/gcp
-        shell: bash
+#       - name: 'Storing SA Key to json file'
+#         id: sa-config
+#         run: |
+#           echo ${{ secrets.GOOGLE_CREDENTIALS }} > credentials.json
+#           mv credentials.json ./infrastructure/terraform/gcp
+#         shell: bash
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -39,7 +39,9 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Validate
-        run: terraform validate
+        run: |
+          echo ${{ secrets.GOOGLE_CREDENTIALS }} > credentials.json
+          terraform validate
         working-directory: ./infrastructure/terraform/gcp
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
