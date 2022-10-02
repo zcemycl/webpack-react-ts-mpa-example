@@ -13,3 +13,18 @@ variable "ar_repo_id" {
     type = string 
     default = "leotestgcr2126"
 }
+
+variable "image_name" {
+    type = string
+    default = "test"
+}
+
+variable "image_tag" {
+    type = string
+    default = "latest"
+}
+
+variable "stage2_deploy" {
+    type = bool
+    default = false
+}

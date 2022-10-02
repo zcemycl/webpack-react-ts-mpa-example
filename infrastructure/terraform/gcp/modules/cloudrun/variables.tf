@@ -11,5 +11,20 @@ variable "gcp_project" {
 
 variable "ar_repo_id" {
     type = string 
-    default = "leotestgcr2"
+    default = "leotestgcr2126"
+}
+
+variable "image_name" {
+    type = string
+    default = "test"
+}
+
+variable "image_tag" {
+    type = string
+    default = "latest"
+}
+
+variable "create" {
+    type = bool
+    default = false
 }

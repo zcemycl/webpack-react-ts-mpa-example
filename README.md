@@ -35,6 +35,7 @@
 
 #### GCP
 1. GCP Artifact Registry
+2. GCP Cloud Run
 
 
 #### References

@@ -27,3 +27,13 @@ module "artifact_registry" {
     gcp_project = var.gcp_project
     ar_repo_id = var.ar_repo_id
 }
+
+module "cloudrun" {
+    source = "./modules/cloudrun"
+    create = var.stage2_deploy
+    gcp_region = var.gcp_region
+    gcp_project = var.gcp_project
+    ar_repo_id = var.ar_repo_id
+    image_name = var.image_name
+    image_tag = var.image_tag
+}
