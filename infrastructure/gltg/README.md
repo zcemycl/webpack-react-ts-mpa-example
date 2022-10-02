@@ -1,0 +1,1 @@
+1. Save gcp credentials to gitlab variable (file).

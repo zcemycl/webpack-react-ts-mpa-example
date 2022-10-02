@@ -1,8 +1,10 @@
 stages:
     - validate
     - plan
-    # - apply
-    # - docker
+    - stage 1 deploy
+    - docker push
+    - stage 2 deploy
+
 
 image:
     name: hashicorp/terraform
@@ -15,10 +17,11 @@ before_script:
     - sed -i "s/_TERRAFORM_TOKEN_/$TF_TOKEN/g" credentials.tfrc.json 
     - cat credentials.tfrc.json 
     - cp credentials.tfrc.json ~/.terraform.d
-    - cd infrastructure/terraform/aws
+    - cd infrastructure/terraform/gcp
+    - cp $GOOGLE_CREDENTIALS credentials.json
     - terraform --version
     - terraform init
-
+    
 validate:
     stage: validate
     script:
@@ -26,7 +29,25 @@ validate:
 
 plan:
     stage: plan
-    # script:
-    #     - terraform plan 
+    script:
+        - terraform plan -var gcp_project=$GCP_PROJECT_ID 
+        - terraform plan -var gcp_project=$GCP_PROJECT_ID -var stage2_deploy=true
     dependencies:
         - validate
+
+stage-1-deploy:
+    stage: stage 1 deploy
+    script:
+        - terraform apply -auto-approve -var gcp_project=$GCP_PROJECT_ID 
+
+docker-push:
+    stage: docker push
+    image: docker:latest
+    services:
+        - docker:dind
+    before_script:
+        - docker --version
+    script:
+        - echo 'abc'
+
+
