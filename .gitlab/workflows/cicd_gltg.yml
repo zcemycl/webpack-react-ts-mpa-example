@@ -1,0 +1,32 @@
+stages:
+    - validate
+    - plan
+    # - apply
+    # - docker
+
+image:
+    name: hashicorp/terraform
+    entrypoint:
+        - '/usr/bin/env'
+        - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+before_script:
+    - mkdir ~/.terraform.d
+    - sed -i "s/_TERRAFORM_TOKEN_/$TF_TOKEN/g" credentials.tfrc.json 
+    - cat credentials.tfrc.json 
+    - cp credentials.tfrc.json ~/.terraform.d
+    - cd infrastructure/terraform/aws
+    - terraform --version
+    - terraform init
+
+validate:
+    stage: validate
+    script:
+        - terraform validate
+
+plan:
+    stage: plan
+    # script:
+    #     - terraform plan 
+    dependencies:
+        - validate
