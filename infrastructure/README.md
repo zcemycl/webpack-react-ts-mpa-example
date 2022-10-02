@@ -16,3 +16,4 @@
 7. Github actions + Terraform + GCP (ghtg)
     - `deploy_ghtg.yml`
 8. Gitlab CI + Terraform + GCP (gltg)
+    - `cicd_dltg.yml`
