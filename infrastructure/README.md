@@ -17,3 +17,7 @@
     - `deploy_ghtg.yml`
 8. Gitlab CI + Terraform + GCP (gltg)
     - `cicd_dltg.yml`
+
+### References
+1. [AWS vs Azure vs GCP: Comparing The Big 3 Cloud Platforms](https://www.bmc.com/blogs/aws-vs-azure-vs-google-cloud-platforms/)
+2. [Google Cloud vs AWS in 2022 (Comparing the Giants)](https://kinsta.com/blog/google-cloud-vs-aws/)
