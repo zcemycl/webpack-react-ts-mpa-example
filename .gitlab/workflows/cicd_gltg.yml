@@ -12,6 +12,11 @@ image:
         - '/usr/bin/env'
         - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
+variables:
+  IMAGE_NAME: test
+  IMAGE_TAG: latest
+  CONTAINER_NAME: leotestgcr2126
+
 before_script:
     - mkdir ~/.terraform.d
     - sed -i "s/_TERRAFORM_TOKEN_/$TF_TOKEN/g" credentials.tfrc.json 
@@ -39,6 +44,8 @@ stage-1-deploy:
     stage: stage 1 deploy
     script:
         - terraform apply -auto-approve -var gcp_project=$GCP_PROJECT_ID 
+    dependencies:
+        - plan
 
 docker-push:
     stage: docker push
@@ -48,6 +55,18 @@ docker-push:
     before_script:
         - docker --version
     script:
-        - echo 'abc'
+        - CONTAINER_URL=europe-west2-docker.pkg.dev/$GCP_PROJECT_ID/$CONTAINER_NAME
+        - IMAGE_URL=$CONTAINER_URL/$IMAGE_NAME
+        - cp $GOOGLE_CREDENTIALS credentials.json
+        - docker login -u _json_key --password-stdin $CONTAINER_URL < ./credentials.json
+        - docker build -t $IMAGE_URL:$IMAGE_TAG . 
+        - docker push $IMAGE_URL:$IMAGE_TAG
+    dependencies:
+        - stage-1-deploy
 
-
+stage-2-deploy:
+    stage: stage 2 deploy
+    script:
+        - terraform apply -auto-approve -var gcp_project=$GCP_PROJECT_ID -var stage2_deploy=true
+    dependencies:
+        - docker-push
