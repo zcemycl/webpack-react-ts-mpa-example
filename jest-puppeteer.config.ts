@@ -1,4 +1,4 @@
-const ci = Boolean(process.env.CI || false);
+// const ci = Boolean(process.env.CI || false);
 
 const baseOptions = {
     server: {
