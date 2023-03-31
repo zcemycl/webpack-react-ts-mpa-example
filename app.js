@@ -3293,7 +3293,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bas
 /******/ 	
 /******/ 	/* webpack/runtime/publicPath */
 /******/ 	!function() {
-/******/ 		__webpack_require__.p = "/";
+/******/ 		__webpack_require__.p = "/webpack-react-ts-mpa-example";
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
