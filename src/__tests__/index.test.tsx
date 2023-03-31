@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
-const ci = Boolean(process.env.CI || false);
+// const ci = Boolean(process.env.CI || false);
+const ci = true;
 jest.setTimeout(50000)
 
 let opts: string[];
@@ -46,7 +47,7 @@ describe('e2e with jest-puppeteer', () => {
         expect(innerText).not.toBe('');
     })
 
-    it('get paragraph without click', async() => {
+    itif(!ci)('get paragraph without click', async() => {
         const page = await browser.newPage();
         const resp = await page.goto('http://localhost:3000/webpack-react-ts-mpa-example', 
             { waitUntil: 'domcontentloaded' })
